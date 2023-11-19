@@ -23,7 +23,7 @@ const Header = () => {
         <header className='h-20 w-full bg-gray-100 shadow-lg flex items-center justify-between px-8 fixed top-0'>
             <div className='flex items-center gap-2 cursor-pointer' onClick={() => setRoute("home")}>
                 <BiLogoFirebase className='text-2xl text-pink-600'/>
-                <span className='text-xl text-pink-600 font-semibold'>FireShopping</span>
+                <span className='text-xl text-pink-600 font-semibold'>FireShopping v2</span>
             </div>
             <div className='flex gap-2'>
             <button className='bg-sky-500 text-white rounded-full py-1 px-3 hover-bg-sky-600 transition hover:bg-sky-600' onClick={() => setRoute("sign in")}>Sing in</button>
