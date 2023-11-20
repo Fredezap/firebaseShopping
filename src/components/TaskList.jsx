@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { addNewTask, getAllTasks, updateTask, deleteTask } from '../firebase/tasksController';
 import { Update } from '@mui/icons-material';
+import { appContext } from '../App';
 
 const TaskList = () => {
+
+    const { setRoute, user, setUser } = useContext(appContext);
+
+    
 
     const [mode, setMode] = useState("add");
 
@@ -27,7 +32,7 @@ const TaskList = () => {
     }, []);
 
     const createNewTask = async () => {
-        await addNewTask(task);
+        await addNewTask(task).catch(e => console.error(e));
         setTask({ title: "", description: "" })
         InitializeTasks()
     }
@@ -59,6 +64,7 @@ const TaskList = () => {
                 <input
                     type="text"
                     placeholder="Titulo"
+                    disabled={!user}
                     onChange={(e) => setTask({...task, title: e.target.value})}
                     value={task.title}
                     className='border shadow outline-none focus:ring-2 ring-sky-200 rounded py-1 px-4 w-full' />  
@@ -66,15 +72,18 @@ const TaskList = () => {
                     type="text"
                     placeholder="Descripcion"
                     rows={3}
+                    disabled={!user}
                     value={task.description}
                     onChange={(e) => setTask({...task, description: e.target.value})}
                     className='border shadow outline-none focus:ring-2 ring-sky-200 rounded py-1 px-4 w-full' />
                 <button
+                    disabled={!user}
                     onClick={() => mode === "add" ? createNewTask() : ModifyTask()}
-                    className='font-semibold bg-sky-400 text-white py-2 rounded hover:bg-sky-500'>
+                    className='font-semibold bg-sky-400 text-white py-2 rounded hover:bg-sky-500 disabled:bg-sky-200'>
                     {mode === "add" ? "Añadir" : "Actualizar"}
                 </button>
             </div>
+            {user && (
                 <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4'>
                     {tasks.length === 0 ? 
                         (<p>Aun no se han agregado tareas</p>) : 
@@ -100,8 +109,12 @@ const TaskList = () => {
                         </div>
                     ))}
                 </div>
+                )}
             </div>
-        </div>
+        {!user && (
+            <p className='text-red-700 font-semibold mt-7 '>Debes estar logueado para poder ver y agregar tareas</p>
+        )}
+    </div>
     );
 }
 
